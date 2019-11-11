@@ -19,7 +19,7 @@ const commandChoice = function() {
       findMovie(searchVal);
       break;
     case "do-what-it-says":
-      doWhatItSays();
+      doWhatItSays(searchVal);
       break;
     default:
       console.log(
@@ -49,6 +49,7 @@ const findConcert = function(artist) {
         Name of venue: ${jsonData[i].venue.name}
         Venue location: ${jsonData[i].venue.city}
         Date of event: ${jsonData[i].datetime}
+        -----------------------------------------
         `;
         console.log(showData);
       }
@@ -69,7 +70,7 @@ const findSong = function(song) {
     let songArray = res.tracks.items;
     for (let i = 0; i < songArray.length; i++) {
       console.log(i + ":");
-      console.log("Artist(s): " + songArray[i].artists);
+      console.log("Artist(s): " + songArray[i].artists.name);
       console.log("Song name: " + songArray[i].name);
       console.log("Preview song: " + songArray[i].preview_url);
       console.log("Album: " + songArray[i].album.name);
@@ -100,9 +101,17 @@ const findMovie = function(movie) {
 };
 
 const doWhatItSays = function(command) {
-  fs.readFile("./random.txt", "utf8", function(error, data) {
+  fs.readFile("random.txt", "utf8", function(error, data) {
     if (error) {
       return console.error(error);
+    }
+
+    let dataArr = data.split(',')
+
+    if (dataArr.length == 2) {
+      console.log(dataArr[0], dataArr[1])
+    }else if (dataArr.length == 1){
+      console.log(dataArr[0])
     }
   });
 };
