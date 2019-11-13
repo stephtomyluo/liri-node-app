@@ -4,6 +4,7 @@ const keys = require("./keys.js");
 const Spotify = require("node-spotify-api");
 const fs = require("fs");
 const spotify = new Spotify(keys.spotify);
+const moment = require('moment')
 
 const commandChoice = function() {
   let input = process.argv;
@@ -43,12 +44,15 @@ const findConcert = function(artist) {
 
     axios.get(URL).then(function(response) {
       const jsonData = response.data;
+      
 
       for (let i = 0; i < jsonData.length; i++) {
+        const date = jsonData[i].datetime
+      const convertedDate = moment(date).format("DD-MMM-YYYY")
         const showData = `
         Name of venue: ${jsonData[i].venue.name}
         Venue location: ${jsonData[i].venue.city}
-        Date of event: ${jsonData[i].datetime}
+        Date of event: ${convertedDate}
         -----------------------------------------
         `;
         console.log(showData);
@@ -70,7 +74,7 @@ const findSong = function(song) {
     let songArray = res.tracks.items;
     for (let i = 0; i < songArray.length; i++) {
       console.log(i + ":");
-      console.log("Artist(s): " + songArray[i].artists.name);
+      console.log("Artist(s): " + songArray[i].album.artists[0].name);
       console.log("Song name: " + songArray[i].name);
       console.log("Preview song: " + songArray[i].preview_url);
       console.log("Album: " + songArray[i].album.name);
@@ -108,11 +112,7 @@ const doWhatItSays = function(command) {
 
     let dataArr = data.split(',')
 
-    if (dataArr.length == 2) {
-      console.log(dataArr[0], dataArr[1])
-    }else if (dataArr.length == 1){
-      console.log(dataArr[0])
-    }
+    findSong(dataArr[1])
   });
 };
 
