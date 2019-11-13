@@ -8,7 +8,7 @@ const moment = require('moment')
 
 const commandChoice = function() {
   let input = process.argv;
-  let searchVal = input.slice(3).join(" ");
+  let searchVal = input.slice(3).join(" ").trim();
   switch (input[2]) {
     case "concert-this":
       findConcert(searchVal);
@@ -17,7 +17,7 @@ const commandChoice = function() {
       findSong(searchVal);
       break;
     case "movie-this":
-      findMovie(searchVal);
+      findMovie(!!searchVal ? searchVal : 'mr nobody');
       break;
     case "do-what-it-says":
       doWhatItSays(searchVal);
@@ -89,7 +89,6 @@ const findMovie = function(movie) {
 
   axios.get(url).then(function(response) {
     const result = response.data;
-
     const showData = `
         Title: ${result.Title}
         Year: ${result.Year}
